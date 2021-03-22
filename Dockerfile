@@ -1,4 +1,4 @@
-FROM mhart/alpine-node AS node 
+FROM node:15 AS node 
 
 COPY . /tmp/project/
 
