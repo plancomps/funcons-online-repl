@@ -8,7 +8,7 @@ const httpServer = require("http").createServer();
 // TODO: Fix cors, need to know client URL for that.
 const io = require("socket.io")(httpServer, {
     cors: {
-        origin: "null"
+        origin: "*"
     }
 });
 var pty = require('node-pty');
