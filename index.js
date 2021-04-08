@@ -20,9 +20,27 @@ socket.on("disconnect", () => {
   });
 
 term.open(document.getElementById('terminal'));
-term.onKey((ev) => {
-    //var enc = new TextEncoder(); // TODO: encode for utf-8?
-    socket.emit("command", ev.key);
+//TODO: UTF-8 Needs to be handled. Something like ä returns ?? now.
+// Not yet sure if this in issue server side or client side.
+term.onData((ev) => {
+	socket.emit("command", ev);
 });
+
+var dead = false;
+var prev = null;
+term.attachCustomKeyEventHandler((ev) => {
+    if (ev.keyCode === 0) {
+        dead = true;
+        return false;
+    }
+    if (dead && ev.keyCode === prev.keyCode) {
+        return true;
+    }
+    let prop = !dead;
+    prev = ev;
+    dead = false;
+    return prop;
+});
+
 terminal.loadAddon(fitAddon);
 fitAddon.fit();
